@@ -10,9 +10,10 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-mongoose.connect('mongodb://0.0.0.0:27017/counter_db', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('Error connecting to MongoDB:', err));
+const mongoURI = 'mongodb+srv://Mouneesh:Mouneesh123@atlascluster.xkz1xvz.mongodb.net/';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => console.error('Error connecting to MongoDB Atlas:', err));
 
 // Define counter schema and model
 const counterSchema = new mongoose.Schema({
