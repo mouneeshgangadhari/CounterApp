@@ -1,6 +1,7 @@
 // express-server/app.js
 const express = require('express');
 const mongoose = require('mongoose');
+const path=require("path");
 const cors = require('cors');
 
 const app = express();
@@ -8,101 +9,80 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cors());
+// app.use(express.static(path.join(__dirname, 'build')));
+
+// Other routes and middleware can go here
+
+// Send index.html for any other requests
+
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://mouneesh:mouneesh123@atlascluster.xkz1xvz.mongodb.net/';
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB Atlas'))
-  .catch(err => console.error('Error connecting to MongoDB Atlas:', err));
+mongoose.connect('mongodb+srv://mouneesh:mouneesh123@atlascluster.xkz1xvz.mongodb.net/')
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('Error connecting to MongoDB:', err));
 
 // Define counter schema and model
 const counterSchema = new mongoose.Schema({
-  count: { type: Number, default: 0 },
-  myCount: { type: Number, default: 0 }
-}, { collection: 'counters' });
+    name: { type: String, required: true },
+    count: { type: Number, default: 0 }
+},{ collection: 'counters' });
 const Counter = mongoose.model('Counter', counterSchema);
 
 // Routes
 app.get('/api/counter', async (req, res) => {
-  try {
-    const counter = await Counter.findOne();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
-
-app.get('/api/myCounter', async (req, res) => {
-  try {
-    const counter = await Counter.findOne();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
+    console.log("Reached GET method")
+    try {
+        let a="counter";
+        let b="counter1"
+        const counter = await Counter.findOne({name:a});
+        const counter1 = await Counter.findOne({name:b});
+        console.log(counter);
+        let counters={counter:counter,counter1:counter1};
+        console.log(counters);
+        res.json(counters);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
 });
 
 app.post('/api/counter/increment', async (req, res) => {
-  try {
-    let counter = await Counter.findOne();
-    if (!counter) {
-      counter = new Counter();
+    try {
+        let name=req.body.name
+        let counter = await Counter.findOne({name});
+        console.log("increased",counter);
+        if (!counter) {
+            counter = new Counter({name});
+        }
+        counter.count++;
+        await counter.save();
+        res.json(counter);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
     }
-    counter.count++;
-    await counter.save();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
-
-app.post('/api/myCounter/increment', async (req, res) => {
-  try {
-    let counter = await Counter.findOne();
-    if (!counter) {
-      counter = new Counter();
-    }
-    counter.myCount++;
-    await counter.save();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
 });
 
 app.post('/api/counter/decrement', async (req, res) => {
-  try {
-    let counter = await Counter.findOne();
-    if (!counter) {
-      counter = new Counter();
+    try {
+        let name=req.body.name
+        let counter = await Counter.findOne({name});
+        if (!counter) {
+            counter = new Counter({name});
+        }
+        counter.count--;
+        await counter.save();
+        res.json(counter);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
     }
-    counter.count--;
-    await counter.save();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
 });
 
-app.post('/api/myCounter/decrement', async (req, res) => {
-  try {
-    let counter = await Counter.findOne();
-    if (!counter) {
-      counter = new Counter();
-    }
-    counter.myCount--;
-    await counter.save();
-    res.json(counter);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server Error' });
-  }
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'));
+//   });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log('Server is running on port ${PORT}');
 });
