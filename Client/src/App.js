@@ -155,11 +155,11 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route
               path="/counter"
-              element={<Counter endpoint="http://localhost:5000/api/counter" title="Counter" />}
+              element={<Counter endpoint="https://counterapp-snfc.onrender.com/api/counter" title="Counter" />}
             />
             <Route
               path="/myCounter"
-              element={<MyCounter endpoint="http://localhost:5000/api/myCounter" title="MyCounter" />}
+              element={<MyCounter endpoint="https://counterapp-snfc.onrender.com/api/myCounter" title="MyCounter" />}
             />
           </Routes>
         </div>
