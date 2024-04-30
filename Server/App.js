@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://Mouneesh:Mouneesh123@atlascluster.xkz1xvz.mongodb.net/';
+const mongoURI = 'mongodb+srv://mouneesh:mouneesh123@atlascluster.xkz1xvz.mongodb.net/';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('Error connecting to MongoDB Atlas:', err));
