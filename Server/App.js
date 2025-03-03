@@ -10,7 +10,7 @@ app.use(cors());
 
 
 // MongoDB Connection
-mongoose.connect('mongodb+srv://mouneesh:mouneesh123@atlascluster.xkz1xvz.mongodb.net/')
+mongoose.connect('mongodb+srv://<UserName>:<Password>@atlascluster.xkz1xvz.mongodb.net/')
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Error connecting to MongoDB:', err));
 
